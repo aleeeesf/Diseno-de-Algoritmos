@@ -1,0 +1,25 @@
+tenemos que diseñar una funcion de factibilidad aparte.
+
+que condiciones tiene que tener las defensas: que no esté fuera del mapa,
+si puede colocarse, que no choque con un obstaculo, que no hay otra defensa...
+
+se refiere a que para valorar el terreno no puede revalorarlo cada vez que 
+coloques algo, primero valoras y luego seleccionas
+
+el centro de la defensa tiene que estar en el centro si o si
+
+cell value es lo ultimo. Primero el algoritmo voraz y luego el factible.
+
+el mapa de los ucos es mas grande, es decir, el mapa es mayor para crear los ucos
+
+echarle un ojo a las funciones #define.
+
+1. en cell value le damos el valor que le queremos dar a cada casilla, 
+dependiendo de los obstaculos y de las casillas.
+si le damos return row+col aparece que las casillas mas valoradas son las de la esquina derecha de abajo.
+si le damos return 
+
+2. al hacer el make test vemos strategy.ppm vemos en negro las casillas con obstaculos.
+
+
+Dudas:

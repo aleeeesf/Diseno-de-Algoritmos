@@ -1,0 +1,15 @@
+<game duration="0">
+ <map width="300" height="300" />
+ <obstacles> 
+  <obstacle id="0" radio="26,9688" x="283,226" y="257,448" z="0" />
+  <obstacle id="1" radio="19,851" x="216,8" y="274,961" z="0" />
+  <obstacle id="2" radio="19,7649" x="168,512" y="41,3971" z="0" />
+  <obstacle id="3" radio="19,7214" x="144,1" y="212,542" z="0" />
+  <obstacle id="4" radio="24,5664" x="61,4294" y="296,131" z="0" />
+  <obstacle id="5" radio="23,6636" x="114,381" y="65,803" z="0" />
+ </obstacles> 
+ <defenses> 
+ </defenses> 
+ <units> 
+ </units> 
+</game>
