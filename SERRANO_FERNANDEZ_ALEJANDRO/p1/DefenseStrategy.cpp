@@ -1,3 +1,8 @@
+/*Arreglar factible y distancia*/
+
+
+
+
 // ###### Config options ################
 
 #define PRINT_DEFENSE_STRATEGY 1    // generate map images
@@ -32,7 +37,7 @@ class Celda
 		const int valor() const {return value_;}
 };
 
-bool operator > (const Celda& a, const Celda& b){ return a.valor() < b.valor();}
+bool operator < (const Celda& a, const Celda& b){ return a.valor() < b.valor();}
 
 float distancia(Celda celdaActual,std::list<Defense*>::iterator objetoActual)
 {
@@ -64,7 +69,7 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 	{
 		//si la suma de los radios es mayor que la distacia que separa entre los centros de las mismas
 		float sumaRadios = (*i)->radio + (*defensa_actual)->radio;
-		if(distancia(celdaActual,i) > sumaRadios) es_factible = false;
+		if(distancia(celdaActual,i) < sumaRadios) es_factible = false;
 	}
 	
 	//No pisa ningún objeto
@@ -72,7 +77,7 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 	{
 		//si la suma de los radios es mayor que la distacia que separa entre los centros de las mismas
 		float sumaRadios = (*i)->radio + (*defensa_actual)->radio;
-		if(distancia(celdaActual,i) > sumaRadios) es_factible = false;
+		if(distancia(celdaActual,i) < sumaRadios) es_factible = false;
 	}
 	
 	//No sale del mapa
@@ -180,9 +185,35 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
 
     float cellWidth = mapWidth / nCellsWidth;
     float cellHeight = mapHeight / nCellsHeight; 
+    bool colocado = false;
 
     List<Defense*>::iterator currentDefense = defenses.begin();
     std::vector<Celda> celdasCandidatas;
+    
+    for(int i = 0; i < nCellsWidth; i++)
+    {
+    	for(int j = 0; j < nCellsHeight; j++)
+    	{
+    		celdasCandidatas.push_back(Celda(i,j,cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
+    	}
+    }
+    
+    sort(celdasCandidatas.begin(),celdasCandidatas.end());    
+    
+    while(!celdasCandidatas.empty() && !colocado)
+    {
+    	if(factible(celdasCandidatas.back(), freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses, defenses.begin()))
+    	{
+    		(*currentDefense)->position.x = celdasCandidatas.back();
+    		(*currentDefense)->position.y = ;
+    		colocado = true;
+    	}
+    	
+    	celdasCandidatas.pop_back();
+    }
+    
+    currentDefense++;
+    celdasCandidatas.clear();
     
     for(int i = 0; i < nCellsWidth; i++)
     {
@@ -192,10 +223,25 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     	}
     }
     
-    sort(celdasCandidatas.begin(),celdasCandidatas.end(),greater <>());
-    
-    vector<Celda>::iterator v = celdasCandidatas.begin();
-    
+ 
+    while(currentDefense != defenses.end()) 
+    {
+    	colocado = false;
+    	
+    	while(!celdasCandidatas.empty() && !colocado)
+    	{
+	    	if(factible(celdasCandidatas.back(), freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses, currentDefense))
+	    	{
+	    		(*currentDefense)->position.x = ;
+	    		(*currentDefense)->position.y = ;
+	    		colocado = true;
+	    	}
+	    	celdasCandidatas.pop_back();
+    	}
+    	
+    	currentDefense++;
+    }  
+
     
 #ifdef PRINT_DEFENSE_STRATEGY
 
