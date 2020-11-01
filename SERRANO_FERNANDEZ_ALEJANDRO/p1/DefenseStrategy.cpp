@@ -89,8 +89,10 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 	//No sale del mapa
 	float centro_x = (celdaActual.row() * cellWidth) +  (0.5f * cellWidth);
 	float centro_y = (celdaActual.col() * cellHeight) + (cellHeight * 0.5f);
-	if((centro_x + (*defensa_actual)->radio) > mapWidth) es_factible = false;
-	else if((centro_y + (*defensa_actual)->radio) > mapHeight) es_factible = false;
+	if((centro_x + (*defensa_actual)->radio) >= mapWidth) es_factible = false;
+	else if((centro_y + (*defensa_actual)->radio) >= mapHeight) es_factible = false;
+	else if((centro_x - (*defensa_actual)->radio) < 0) es_factible = false;
+	else if((centro_y - (*defensa_actual)->radio) < 0) es_factible = false;
 	
 	return es_factible;
 }
@@ -188,6 +190,7 @@ float cellValue2(int row, int col, bool** freeCells, int nCellsWidth, int nCells
 	return valor;
 }
 
+/*
 float cellValue3(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
 	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
 	
@@ -197,17 +200,39 @@ float cellValue3(int row, int col, bool** freeCells, int nCellsWidth, int nCells
     	x=row*cellWidth+cellWidth*0.5f;
     	y=col*cellHeight+cellHeight*0.5f;  
   	float centro_cuadrante = 0, posicion = 0;
-  	float valor=255;
+  	float valor=0,valor2=0;  	
+  	
+  	if( (mapWidth - (row*cellWidth)) < (5 * cellWidth)) 	valor += (mapWidth - (row*cellWidth));	
+  	if( (mapHeight - (col * cellHeight)) < (5 * cellHeight)) 	valor += (mapHeight - (col * cellHeight)); 	
 
-	centro_cuadrante = (nCellsWidth/2);
-	posicion = abs(centro_cuadrante - col);
-	valor -= posicion;
-	posicion = abs(centro_cuadrante - row);
-	valor -= posicion;
-
+	valor+=row+col;
+	
 	return valor;
 }
 
+float cellValue_defensas(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
+	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
+	
+	float cellWidth = mapWidth / nCellsWidth;
+    	float cellHeight = mapHeight / nCellsHeight; 
+    	float x,y,distanciapuntos=0;
+    	x=row*cellWidth+cellWidth*0.5f;
+    	y=col*cellHeight+cellHeight*0.5f;  
+  	float centro_cuadrante = 0, posicion = 0;
+  	float valor=255, valor2=0;
+	List<Defense*>::iterator currentDefense = defenses.begin();
+
+	valor2 = abs((*currentDefense)->position.x - row*cellWidth);
+	valor -= valor2;
+	valor2 = abs((*currentDefense)->position.y - col*cellHeight);
+	valor -= valor2;
+
+	if(valor2 == abs((*currentDefense)->position.x - row*cellWidth)) valor += valor2;
+	
+	return valor;
+}
+
+*/
 
 void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCellsHeight, float mapWidth, float mapHeight
               , std::list<Object*> obstacles, std::list<Defense*> defenses) {
@@ -247,7 +272,7 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     {
     	for(int j = 0; j < nCellsHeight; j++)
     	{
-    		celdasCandidatas.push_back(Celda(i,j,cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
+    		celdasCandidatas.push_back(Celda(i,j,cellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
     	}
     }
     
@@ -280,7 +305,16 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
            cellValues[i][j] = ((int)(cellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses))) % 256;
          }
     }
-    
+    	/*
+	for(int i = 0; i < nCellsHeight; ++i) {
+
+       		for(int j = 0; j < nCellsWidth; ++j) {
+
+          	 std::cout<<cellValues[i][j]<<" ";
+         	}
+         	std::cout<<std::endl;
+    	}
+    */
     dPrintMap("strategy.ppm", nCellsHeight, nCellsWidth, cellHeight, cellWidth, freeCells
                          , cellValues, std::list<Defense*>(), true);
 
