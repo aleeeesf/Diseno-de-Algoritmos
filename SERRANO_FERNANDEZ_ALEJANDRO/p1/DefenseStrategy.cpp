@@ -96,77 +96,119 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 	
 	return es_factible;
 }
+/*
+float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
+	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
+	
+	float cellWidth = mapWidth / nCellsWidth;
+    	float cellHeight = mapHeight / nCellsHeight; 
+    	float x,y;
+    	x=row*cellWidth+cellWidth*0.5f;
+    	y=col*cellHeight+cellHeight*0.5f;  
+  	float centro_cuadrante = 0, posicion = 0;
+  	float valor=255, max_radio = 0, max_valor = 0;
+	int celda_x, celda_y,celda_x_objeto,celda_y_objeto;
+	
+	List<Object*>::iterator obstaculoGanador;
+	
+	for(List<Object*>::iterator i = obstacles.begin(); i != obstacles.end(); i++)
+	{
+		posicion = 0; valor = 255;
+		celda_x = (nCellsWidth/2);
+		celda_y = (nCellsHeight/2);
+		celda_x_objeto = (int)(((*i)->position.x - cellWidth/2) / cellWidth);
+		celda_y_objeto = (int)(((*i)->position.y - cellHeight/2) / cellHeight);	
+
+		posicion = abs(celda_x - celda_x_objeto);
+		valor -= posicion;
+		posicion = abs(celda_y - celda_y_objeto);
+		valor -= posicion;
+		
+		//(*i)->radio > max_radio || 
+		if(valor > max_valor)
+		{
+			max_radio = (*i)->radio;
+			obstaculoGanador = i;
+			max_valor = valor;
+		}
+	}
+
+
+	posicion = 0; valor = 255;
+	celda_x = (((*obstaculoGanador)->position.x - cellWidth/2) / cellWidth);
+	celda_y = (((*obstaculoGanador)->position.y - cellHeight/2) / cellHeight);
+
+	posicion = abs(celda_x - row);
+	valor -= posicion;
+	posicion = abs(celda_y - col);
+	valor -= posicion;
+
+	return valor;
+}
+*/
 
 float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
 	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
 	
 	float cellWidth = mapWidth / nCellsWidth;
     	float cellHeight = mapHeight / nCellsHeight; 
-    	float x,y,distanciapuntos=0;
+    	float x,y,celda_x_objeto,celda_y_objeto;
     	x=row*cellWidth+cellWidth*0.5f;
     	y=col*cellHeight+cellHeight*0.5f;  
   	float centro_cuadrante = 0, posicion = 0;
-  	float valor=255;
-
-	/* 	Cuadrante de las filas		*/	
-	if(row <= nCellsHeight/4)
+  	float valor=255, max_radio = 0, max_valor = 0;
+	int celda_x, celda_y;
+	
+	bool borde = false;
+	List<Object*>::iterator obstaculoGanador,obstaculoGanador_valor, obstaculoGanador_radio;
+	
+	for(List<Object*>::iterator i = obstacles.begin(); i != obstacles.end(); i++)
 	{
-		centro_cuadrante = (nCellsHeight/4)/2;
-		posicion = abs(centro_cuadrante - row);
-		valor -= posicion;
-	}
+		posicion = 0; valor = 255;
+		celda_x = (nCellsWidth/2);
+		celda_y = (nCellsHeight/2);
+		celda_x_objeto = (int)(((*i)->position.x - cellWidth/2) / cellWidth);
+		celda_y_objeto = (int)(((*i)->position.y - cellHeight/2) / cellHeight);	
 
-	else if(row <= (nCellsHeight/4)*2)
-	{
-		centro_cuadrante = ((nCellsHeight/4)*2 - (nCellsHeight/4)/2);
-		posicion = abs(centro_cuadrante - row);
+		posicion = abs(celda_x - celda_x_objeto);
 		valor -= posicion;
-	}
-
-	else if(row <= (nCellsHeight/4)*3)
-	{
-		centro_cuadrante = ((nCellsHeight/4)*3 - (nCellsHeight/4)/2);
-		posicion = abs(centro_cuadrante - row);
+		posicion = abs(celda_y - celda_y_objeto);
 		valor -= posicion;
-	}
-
-	else if(row <= nCellsHeight)
-	{
-		centro_cuadrante = (nCellsHeight - (nCellsHeight/4)/2);
-		posicion = abs(centro_cuadrante - row);
-		valor -= posicion;
-	}
-
-	/*	Cuandrante de las columnas	*/	
-	if(col <= nCellsWidth/4)
-	{
-		centro_cuadrante = (nCellsWidth/4)/2;
-		posicion = abs(centro_cuadrante - col);
-		valor -= posicion;
-
-	}
-
-	else if(col <= (nCellsWidth/4)*2)
-	{
-		centro_cuadrante = ((nCellsWidth/4)*2 - (nCellsWidth/4)/2);
-		posicion = abs(centro_cuadrante - col);
-		valor -= posicion;
-	}
-
-	else if(col <= (nCellsWidth/4)*3)
-	{
-		centro_cuadrante = ((nCellsWidth/4)*3 - (nCellsWidth/4)/2);
-		posicion = abs(centro_cuadrante - col);
-		valor -= posicion;
-	}
-
-	else if(col <= nCellsWidth)
-	{
-		centro_cuadrante = (nCellsWidth - (nCellsWidth/4)/2);
-		posicion = abs(centro_cuadrante - col);
-		valor -= posicion;
+		
+		if((*i)->radio > max_radio)
+		{
+			max_radio = (*i)->radio;
+			obstaculoGanador_radio = i;
+		}
+		
+		if(valor > max_valor)
+		{
+			obstaculoGanador_valor = i;
+			max_valor = valor;
+		}
 	}
 	
+	celda_x_objeto = (((*obstaculoGanador_radio)->position.x - cellWidth/2) / cellWidth);
+	celda_y_objeto = (((*obstaculoGanador_radio)->position.y - cellHeight/2) / cellHeight);	
+	
+	if(abs(mapWidth - celda_x_objeto*cellWidth < 40)) borde = true;
+	else if(abs(mapHeight - celda_y_objeto*cellHeight < 40)) borde = true;
+	else if(abs(0 - celda_x_objeto*cellWidth < 40)) borde = true;
+	else if(abs(0 - celda_y_objeto*cellHeight < 40)) borde = true;
+	
+	
+	if(borde) obstaculoGanador = obstaculoGanador_valor;
+	else obstaculoGanador = obstaculoGanador_radio;
+
+	posicion = 0; valor = 255;
+	celda_x = (((*obstaculoGanador)->position.x - cellWidth/2) / cellWidth);
+	celda_y = (((*obstaculoGanador)->position.y - cellHeight/2) / cellHeight);
+
+	posicion = abs(celda_x - row);
+	valor -= posicion;
+	posicion = abs(celda_y - col);
+	valor -= posicion;
+
 	return valor;
 }
 
@@ -180,11 +222,16 @@ float cellValue2(int row, int col, bool** freeCells, int nCellsWidth, int nCells
     	y=col*cellHeight+cellHeight*0.5f;  
   	float centro_cuadrante = 0, posicion = 0;
   	float valor=255;
+	int celda_x, celda_y;
+	
+	List<Defense*>::iterator defensaPrincipal = defenses.begin();
+	
+	celda_x = (((*defensaPrincipal)->position.x - cellWidth/2) / cellWidth);
+	celda_y = (((*defensaPrincipal)->position.y - cellHeight/2) / cellHeight);
 
-	centro_cuadrante = (nCellsWidth/2);
-	posicion = abs(centro_cuadrante - col);
+	posicion = abs(celda_x - row);
 	valor -= posicion;
-	posicion = abs(centro_cuadrante - row);
+	posicion = abs(celda_y - col);
 	valor -= posicion;
 
 	return valor;
@@ -248,7 +295,7 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     {
     	for(int j = 0; j < nCellsHeight; j++)
     	{
-    		celdasCandidatas.push_back(Celda(i,j,cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
+    		celdasCandidatas.push_back(Celda(i,j,cellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
     	}
     }
     
@@ -272,7 +319,7 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     {
     	for(int j = 0; j < nCellsHeight; j++)
     	{
-    		celdasCandidatas.push_back(Celda(i,j,cellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
+    		celdasCandidatas.push_back(Celda(i,j,cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
     	}
     }
     
@@ -302,7 +349,7 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     for(int i = 0; i < nCellsHeight; ++i) {
        cellValues[i] = new float[nCellsWidth];
        for(int j = 0; j < nCellsWidth; ++j) {
-           cellValues[i][j] = ((int)(cellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses))) % 256;
+           cellValues[i][j] = ((int)(cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses))) % 256;
          }
     }
     	/*
