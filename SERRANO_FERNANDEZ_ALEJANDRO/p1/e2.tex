@@ -1,1 +1,25 @@
-Escriba aquí su respuesta al ejercicio 2.
+La función de factibidad realizada recibirá una celda y será evaluda de tal manera que cumpla los siguientes requisitos:
+
+
+1) Que no se interponga con ningún obstáculo. Para ello comprobaremos que la suma del radio de la defensa a colocar y de la defensa a comparar, no sea mayor que la distancia entre ambos centros.
+
+
+2) Que no se interponga con ninguna otra defensa. Para ello comprobaremos de tal manera que el apartado anterior.
+
+
+3) Que no salga del mapa, comprobando que la suma del radio y el centro de la defensa a colocar no sobrepase los límites del mapa.
+
+
+En cuanto a su implementación, ésta función recorrerá todos los obstáculos y defensas, y determinará si la celda escogida se interpone con alguna de ellas. Para ello sumaremos el radio de la 
+defensa a colocar y el radio de la defensa u obstáculo a comparar. Si la suma de los radios es mayor que la distancia entre ambos centros, daremos por concluido que celda no es válida. Para determinar la 
+distancia entre ambos centros, hemos de definir previamente una función distancia() que realizará dicho cálculo a través del teorema de Pitágoras.
+
+Finalmente, la función determinará si la defensa no sale del mapa, para ello sumamos el radio de la defensa y el centro de la celda a comprobar. Si la suma supera los límites del mapa, entonces descartaremos dicha celda.
+\hfill \break
+\hfill \break
+\hfill \break
+
+
+
+
+

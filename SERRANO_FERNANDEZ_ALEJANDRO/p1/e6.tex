@@ -1,13 +1,39 @@
 \begin{lstlisting}
-// sustituya este codigo por su respuesta
-void placeDefenses(...) {
-
-    List<Defense*>::iterator currentDefense = defenses.begin();
-    while(currentDefense != defenses.end() && maxAttemps > 0) {
-
-        (*currentDefense)->position.x = ((int)(_RAND2(nCellsWidth))) * cellWidth + cellWidth * 0.5f;
-        ...
-        ++currentDefense;
+    
+    //Coemnzamos con la siguiente defensa a colocar
+    currentDefense++;
+    //Eliminamos el vector con todas las celdas anteriores, para colocar las nuevas con otro cellValue
+    celdasCandidatas.clear();
+    
+    //Introducimos las celdas con sus correspodientes valores
+    for(int i = 0; i < nCellsWidth; i++)
+    {
+    	for(int j = 0; j < nCellsHeight; j++)
+    	{
+    		celdasCandidatas.push_back(Celda(i,j,cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
+    	}
     }
+    
+    //Ordenamos el vector
+    sort(celdasCandidatas.begin(),celdasCandidatas.end()); 
+ 
+    //Vamos colocando las defensas restantes en aquellas celdas factibles con mayor valor
+    while(currentDefense != defenses.end()) 
+    {
+    	colocado = false;
+    	
+    	while(!celdasCandidatas.empty() && !colocado)
+    	{
+	    	if(factible(celdasCandidatas.back(), freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses, currentDefense))
+	    	{
+	    		(*currentDefense)->position.x = (celdasCandidatas.back().row() * cellWidth) +  (0.5f * cellWidth);
+    			(*currentDefense)->position.y = (celdasCandidatas.back().col() * cellHeight) + (cellHeight * 0.5f);
+	    		colocado = true;
+	     	}
+	    	celdasCandidatas.pop_back();
+    	}    	
+    	currentDefense++;
+    }  
+
 }
 \end{lstlisting}

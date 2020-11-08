@@ -1,0 +1,95 @@
+/*
+float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
+	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
+	
+	float cellWidth = mapWidth / nCellsWidth;
+    	float cellHeight = mapHeight / nCellsHeight; 
+    	float x,y;
+    	x=row*cellWidth+cellWidth*0.5f;
+    	y=col*cellHeight+cellHeight*0.5f;  
+  	float centro_cuadrante = 0, posicion = 0;
+  	float valor=255, max_radio = 0, max_valor = 0;
+	int celda_x, celda_y,celda_x_objeto,celda_y_objeto;
+	
+	List<Object*>::iterator obstaculoGanador;
+	
+	for(List<Object*>::iterator i = obstacles.begin(); i != obstacles.end(); i++)
+	{
+		posicion = 0; valor = 255;
+		celda_x = (nCellsWidth/2);
+		celda_y = (nCellsHeight/2);
+		celda_x_objeto = (int)(((*i)->position.x - cellWidth/2) / cellWidth);
+		celda_y_objeto = (int)(((*i)->position.y - cellHeight/2) / cellHeight);	
+
+		posicion = abs(celda_x - celda_x_objeto);
+		valor -= posicion;
+		posicion = abs(celda_y - celda_y_objeto);
+		valor -= posicion;
+		
+		//(*i)->radio > max_radio || 
+		if(valor > max_valor)
+		{
+			max_radio = (*i)->radio;
+			obstaculoGanador = i;
+			max_valor = valor;
+		}
+	}
+
+
+	posicion = 0; valor = 255;
+	celda_x = (((*obstaculoGanador)->position.x - cellWidth/2) / cellWidth);
+	celda_y = (((*obstaculoGanador)->position.y - cellHeight/2) / cellHeight);
+
+	posicion = abs(celda_x - row);
+	valor -= posicion;
+	posicion = abs(celda_y - col);
+	valor -= posicion;
+
+	return valor;
+}
+*/
+
+
+/*
+float cellValue3(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
+	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
+	
+	float cellWidth = mapWidth / nCellsWidth;
+    	float cellHeight = mapHeight / nCellsHeight; 
+    	float x,y,distanciapuntos=0;
+    	x=row*cellWidth+cellWidth*0.5f;
+    	y=col*cellHeight+cellHeight*0.5f;  
+  	float centro_cuadrante = 0, posicion = 0;
+  	float valor=0,valor2=0;  	
+  	
+  	if( (mapWidth - (row*cellWidth)) < (5 * cellWidth)) 	valor += (mapWidth - (row*cellWidth));	
+  	if( (mapHeight - (col * cellHeight)) < (5 * cellHeight)) 	valor += (mapHeight - (col * cellHeight)); 	
+
+	valor+=row+col;
+	
+	return valor;
+}
+
+float cellValue_defensas(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
+	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
+	
+	float cellWidth = mapWidth / nCellsWidth;
+    	float cellHeight = mapHeight / nCellsHeight; 
+    	float x,y,distanciapuntos=0;
+    	x=row*cellWidth+cellWidth*0.5f;
+    	y=col*cellHeight+cellHeight*0.5f;  
+  	float centro_cuadrante = 0, posicion = 0;
+  	float valor=255, valor2=0;
+	List<Defense*>::iterator currentDefense = defenses.begin();
+
+	valor2 = abs((*currentDefense)->position.x - row*cellWidth);
+	valor -= valor2;
+	valor2 = abs((*currentDefense)->position.y - col*cellHeight);
+	valor -= valor2;
+
+	if(valor2 == abs((*currentDefense)->position.x - row*cellWidth)) valor += valor2;
+	
+	return valor;
+}
+
+*/s

@@ -1,13 +1,33 @@
 \begin{lstlisting}
-// sustituya este codigo por su respuesta
-void placeDefenses(...) {
-
+    float cellWidth = mapWidth / nCellsWidth;
+    float cellHeight = mapHeight / nCellsHeight; 
+    bool colocado = false;
+ 
+    //Tomamos la primera defensa
     List<Defense*>::iterator currentDefense = defenses.begin();
-    while(currentDefense != defenses.end() && maxAttemps > 0) {
-
-        (*currentDefense)->position.x = ((int)(_RAND2(nCellsWidth))) * cellWidth + cellWidth * 0.5f;
-        ...
-        ++currentDefense;
+    std::vector<Celda> celdasCandidatas;
+    
+    //Introducimos todas las celdas candidatas, con sus respectivos valores
+    for(int i = 0; i < nCellsWidth; i++)
+    {
+    	for(int j = 0; j < nCellsHeight; j++)
+    	{
+    		celdasCandidatas.push_back(Celda(i,j,cellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
+    	}
     }
-}
+    
+    //Ordenamos el vector, para asi obtener primero las celdas con mayor valor
+    sort(celdasCandidatas.begin(),celdasCandidatas.end());    
+    
+    //Colocamos el centro de extraccion en la celda factible con mayor valor
+    while(!celdasCandidatas.empty() && !colocado)
+    {
+    	if(factible(celdasCandidatas.back(), freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses, defenses.begin()))
+    	{
+    		(*currentDefense)->position.x = (celdasCandidatas.back().row() * cellWidth) +  (0.5f * cellWidth);
+    		(*currentDefense)->position.y = (celdasCandidatas.back().col() * cellHeight) + (cellHeight * 0.5f);
+    		colocado = true;
+    	}    	
+    	celdasCandidatas.pop_back();
+    }
 \end{lstlisting}

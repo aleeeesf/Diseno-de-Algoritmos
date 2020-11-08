@@ -1,6 +1,19 @@
-Escriba aquí su respuesta al ejercicio 1. 
+Para el caso del centro de extracción de materiales he seguido la siguiente estrategia. Aquellas celdas que se encuentren cerca del obstáculo con mayor radio, 
+tendrán un mayor valor. En cambio, si estos obstáculos se encuentran cerca del borde del mapa, se escogerá aquel obstáculo que más al centro del mapa se encuentre.
+Para determinar si un obstáculo está cerca del borde del mapa, supondré un margen de un 40\% desde los extremos del mapa. Por ejemplo, si el mapa tiene una anchura y un
+alto de 340, todas los obstáculos fuera del margen de un ancho y un alto de 204 se descartarán, y se valorarán aquellos obstáculos que más al centro se encuentren.
 
-% Elimine los símbolos de tanto por ciento para descomentar las siguientes instrucciones e incluir una imagen en su respuesta. La mejor ubicación de la imagen será determinada por el compilador de Latex. No tiene por qué situarse a continuación en el fichero en formato pdf resultante.
+
+En cuanto al diseño de la función, vamos tomando todos los obstáculos y almacenaremos aquellos que tienen mayor radio y aquellos que más al centro del mapa se encuentren.
+Para determinar el valor del obstáculo que más al centro se encuentra, partimos de una variable valor inicializada a 255 (el valor máximo definido por mí), y conforme más 
+alejado esté el obstáculo del centro de mapa, se le irá restando valor.
+
+Una vez determinado los obstáculos candidatos, comprobaremos si el obstáculo con mayor radio se encuentra dentro del margen, tal y como expliqué anteriormente. En caso contrario escogeremos
+el más cercano al centro del mapa.
+
+Finalmente repetimos la misma estrategia anterior para determinar los valores de las celdas más cercanas al obstáculo seleccionado. Inciamos de nuevo la variable valor a 255 y vamos restándole
+valor conforme más alejadas estén del obstáculo seleccionado.
+%Elimine los símbolos de tanto por ciento para descomentar las siguientes instrucciones e incluir una imagen en su respuesta. La mejor ubicación de la imagen será determinada por el compilador de Latex. No tiene por qué situarse a continuación en el fichero en formato pdf resultante.
 %\begin{figure}
 %\centering
 %\includegraphics[width=0.7\linewidth]{./defenseValueCellsHead} % no es necesario especificar la extensión del archivo que contiene la imagen

@@ -1,1 +1,24 @@
-Escriba aquí su respuesta al ejercicio 4.
+La principal característica que lo define como un algoritmo voraz estriba en el uso de una estrategia que consista en elegir siempre la mejor opción
+con la esperanza de llegar a la solución más óptima, en nuestro caso, elegimos la celda con más valor que nos permita aguantar el máximo tiempo posible nuestra base.
+Para ello vamos seleccionando celdas de mayor valor y comprobaremos si es factible. En dicho caso colocaremos la defensa en dicha celda. Una vez elegida la celda, ésta nunca más vuelve a ser considerada.
+
+
+Para nuestro algoritmo, distinguimos los siguientes elementos:
+
+
+·Un conjunto de candidatos: Celdas
+
+
+·Una función solución: ¿Se han colocado ya todas las defensas?
+
+
+·Una función de selección: Elige la celda con más valor de entre todas las disponibles
+
+
+·Una función de factibilidad: Comprueba si la celda seleccionada no se interpone con alguna defensa u obstáculo, ni salga de los límites del mapa
+
+
+·Una función objetivo: colocar las defensas en las celdas con mayor valor
+
+
+·Objetivo: maximizar

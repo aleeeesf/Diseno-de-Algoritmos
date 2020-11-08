@@ -61,14 +61,15 @@ float distancia(Celda celdaActual,std::list<Object*>::iterator objetoActual, int
 bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHeight
 	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses, std::list<Defense*>::iterator defensa_actual)
 {
-	/*	Una posición es factible si:
-	  		-no pisa ninguna defensa
-	  		-no pise ningun obstaculo
-	  		-no se salga del mapa
+	/*  Una posición es factible si:
+ 	       -no pisa ninguna defensa
+  	       -no pise ningun obstaculo
+	       -no se salga del mapa
   	*/
 	bool es_factible = true;
 	float cellWidth = mapWidth / nCellsWidth;
     	float cellHeight = mapHeight / nCellsHeight; 
+    	float centro_x,centro_y; 
     	
 	//No pisa ninguna defensa
 	for(auto i = defenses.begin(); i != defenses.end(); i++)
@@ -87,8 +88,9 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 	}
 	
 	//No sale del mapa
-	float centro_x = (celdaActual.row() * cellWidth) +  (0.5f * cellWidth);
-	float centro_y = (celdaActual.col() * cellHeight) + (cellHeight * 0.5f);
+	centro_x = (celdaActual.row() * cellWidth) +  (0.5f * cellWidth);
+	centro_y = (celdaActual.col() * cellHeight) + (cellHeight * 0.5f);
+	
 	if((centro_x + (*defensa_actual)->radio) >= mapWidth) es_factible = false;
 	else if((centro_y + (*defensa_actual)->radio) >= mapHeight) es_factible = false;
 	else if((centro_x - (*defensa_actual)->radio) < 0) es_factible = false;
@@ -96,56 +98,7 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 	
 	return es_factible;
 }
-/*
-float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
-	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
-	
-	float cellWidth = mapWidth / nCellsWidth;
-    	float cellHeight = mapHeight / nCellsHeight; 
-    	float x,y;
-    	x=row*cellWidth+cellWidth*0.5f;
-    	y=col*cellHeight+cellHeight*0.5f;  
-  	float centro_cuadrante = 0, posicion = 0;
-  	float valor=255, max_radio = 0, max_valor = 0;
-	int celda_x, celda_y,celda_x_objeto,celda_y_objeto;
-	
-	List<Object*>::iterator obstaculoGanador;
-	
-	for(List<Object*>::iterator i = obstacles.begin(); i != obstacles.end(); i++)
-	{
-		posicion = 0; valor = 255;
-		celda_x = (nCellsWidth/2);
-		celda_y = (nCellsHeight/2);
-		celda_x_objeto = (int)(((*i)->position.x - cellWidth/2) / cellWidth);
-		celda_y_objeto = (int)(((*i)->position.y - cellHeight/2) / cellHeight);	
 
-		posicion = abs(celda_x - celda_x_objeto);
-		valor -= posicion;
-		posicion = abs(celda_y - celda_y_objeto);
-		valor -= posicion;
-		
-		//(*i)->radio > max_radio || 
-		if(valor > max_valor)
-		{
-			max_radio = (*i)->radio;
-			obstaculoGanador = i;
-			max_valor = valor;
-		}
-	}
-
-
-	posicion = 0; valor = 255;
-	celda_x = (((*obstaculoGanador)->position.x - cellWidth/2) / cellWidth);
-	celda_y = (((*obstaculoGanador)->position.y - cellHeight/2) / cellHeight);
-
-	posicion = abs(celda_x - row);
-	valor -= posicion;
-	posicion = abs(celda_y - col);
-	valor -= posicion;
-
-	return valor;
-}
-*/
 
 float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
 	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
@@ -158,6 +111,7 @@ float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsH
   	float centro_cuadrante = 0, posicion = 0;
   	float valor=255, max_radio = 0, max_valor = 0;
 	int celda_x, celda_y;
+	float porcentaje = 0.40f;
 	
 	bool borde = false;
 	List<Object*>::iterator obstaculoGanador,obstaculoGanador_valor, obstaculoGanador_radio;
@@ -191,10 +145,12 @@ float cellValue(int row, int col, bool** freeCells, int nCellsWidth, int nCellsH
 	celda_x_objeto = (((*obstaculoGanador_radio)->position.x - cellWidth/2) / cellWidth);
 	celda_y_objeto = (((*obstaculoGanador_radio)->position.y - cellHeight/2) / cellHeight);	
 	
-	if(abs(mapWidth - celda_x_objeto*cellWidth < 40)) borde = true;
-	else if(abs(mapHeight - celda_y_objeto*cellHeight < 40)) borde = true;
-	else if(abs(0 - celda_x_objeto*cellWidth < 40)) borde = true;
-	else if(abs(0 - celda_y_objeto*cellHeight < 40)) borde = true;
+
+	
+	if(abs(mapWidth - celda_x_objeto*cellWidth) < (porcentaje*mapWidth)) borde = true;
+	else if(abs(mapHeight - celda_y_objeto*cellHeight) < (porcentaje*mapHeight)) borde = true;
+	else if(abs(0 - celda_x_objeto*cellWidth) < (porcentaje*mapWidth)) borde = true;
+	else if(abs(0 - celda_y_objeto*cellHeight) < (porcentaje*mapHeight)) borde = true;
 	
 	
 	if(borde) obstaculoGanador = obstaculoGanador_valor;
@@ -226,6 +182,8 @@ float cellValue2(int row, int col, bool** freeCells, int nCellsWidth, int nCells
 	
 	List<Defense*>::iterator defensaPrincipal = defenses.begin();
 	
+	//Se colocan alrededor de la defensa principal
+	//Las celdas mas cercana al la defensa tendrán mayor valor
 	celda_x = (((*defensaPrincipal)->position.x - cellWidth/2) / cellWidth);
 	celda_y = (((*defensaPrincipal)->position.y - cellHeight/2) / cellHeight);
 
@@ -237,49 +195,6 @@ float cellValue2(int row, int col, bool** freeCells, int nCellsWidth, int nCells
 	return valor;
 }
 
-/*
-float cellValue3(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
-	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
-	
-	float cellWidth = mapWidth / nCellsWidth;
-    	float cellHeight = mapHeight / nCellsHeight; 
-    	float x,y,distanciapuntos=0;
-    	x=row*cellWidth+cellWidth*0.5f;
-    	y=col*cellHeight+cellHeight*0.5f;  
-  	float centro_cuadrante = 0, posicion = 0;
-  	float valor=0,valor2=0;  	
-  	
-  	if( (mapWidth - (row*cellWidth)) < (5 * cellWidth)) 	valor += (mapWidth - (row*cellWidth));	
-  	if( (mapHeight - (col * cellHeight)) < (5 * cellHeight)) 	valor += (mapHeight - (col * cellHeight)); 	
-
-	valor+=row+col;
-	
-	return valor;
-}
-
-float cellValue_defensas(int row, int col, bool** freeCells, int nCellsWidth, int nCellsHeight
-	, float mapWidth, float mapHeight, List<Object*> obstacles, List<Defense*> defenses) {
-	
-	float cellWidth = mapWidth / nCellsWidth;
-    	float cellHeight = mapHeight / nCellsHeight; 
-    	float x,y,distanciapuntos=0;
-    	x=row*cellWidth+cellWidth*0.5f;
-    	y=col*cellHeight+cellHeight*0.5f;  
-  	float centro_cuadrante = 0, posicion = 0;
-  	float valor=255, valor2=0;
-	List<Defense*>::iterator currentDefense = defenses.begin();
-
-	valor2 = abs((*currentDefense)->position.x - row*cellWidth);
-	valor -= valor2;
-	valor2 = abs((*currentDefense)->position.y - col*cellHeight);
-	valor -= valor2;
-
-	if(valor2 == abs((*currentDefense)->position.x - row*cellWidth)) valor += valor2;
-	
-	return valor;
-}
-
-*/
 
 void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCellsHeight, float mapWidth, float mapHeight
               , std::list<Object*> obstacles, std::list<Defense*> defenses) {
@@ -291,6 +206,7 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     List<Defense*>::iterator currentDefense = defenses.begin();
     std::vector<Celda> celdasCandidatas;
     
+    //Introducimos todas las celdas con sus correspondientes valores
     for(int i = 0; i < nCellsWidth; i++)
     {
     	for(int j = 0; j < nCellsHeight; j++)
@@ -301,8 +217,10 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     
     sort(celdasCandidatas.begin(),celdasCandidatas.end());    
     
+    //Vamos sacando todas las celdas introducidas anteriormente (Aquellas que tengan mayor valor). 
     while(!celdasCandidatas.empty() && !colocado)
     {
+    	//Si es factible colocamos el centro de extracción
     	if(factible(celdasCandidatas.back(), freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses, defenses.begin()))
     	{
     		(*currentDefense)->position.x = (celdasCandidatas.back().row() * cellWidth) +  (0.5f * cellWidth);
@@ -313,6 +231,8 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     }
     
     currentDefense++;
+    
+    //Volvemos a intrducir todas las celdas, pero esta vez con otro cellValue
     celdasCandidatas.clear();
     
     for(int i = 0; i < nCellsWidth; i++)
@@ -323,8 +243,10 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
     	}
     }
     
+    //Ordenamos para obtener siempre los de mayor valor
     sort(celdasCandidatas.begin(),celdasCandidatas.end()); 
  
+    //Vamos colocando las defensas restantes y comprobando aquellas que sean factibles
     while(currentDefense != defenses.end()) 
     {
     	colocado = false;
@@ -352,16 +274,7 @@ void DEF_LIB_EXPORTED placeDefenses(bool** freeCells, int nCellsWidth, int nCell
            cellValues[i][j] = ((int)(cellValue2(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses))) % 256;
          }
     }
-    	/*
-	for(int i = 0; i < nCellsHeight; ++i) {
 
-       		for(int j = 0; j < nCellsWidth; ++j) {
-
-          	 std::cout<<cellValues[i][j]<<" ";
-         	}
-         	std::cout<<std::endl;
-    	}
-    */
     dPrintMap("strategy.ppm", nCellsHeight, nCellsWidth, cellHeight, cellWidth, freeCells
                          , cellValues, std::list<Defense*>(), true);
 
