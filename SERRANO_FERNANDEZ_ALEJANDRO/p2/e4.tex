@@ -1,15 +1,30 @@
 \begin{lstlisting}
-// sustituya este codigo por su respuesta
-void selectDefenses(...) {
+	//Algoritmo que recupera la combinacion optima de defensas
+	int j = ases;
+	i = N-1;
 
-    unsigned int cost = 0;
-    std::list<Defense*>::iterator it = defenses.begin();
-    while(it != defenses.end()) {
-        if(cost + (*it)->cost <= ases) {
-            selectedIDs.push_back((*it)->id);
-            cost += (*it)->cost;
-        }
-        ++it;
-    }
-}
+    	std::list<Defense*>::iterator it = defenses.begin();
+
+	//Colocamos la primera defensa
+	selectedIDs.push_back((*it)->id);
+	j = j - p[0];
+	
+	//Empezamos desde la ultima defensa
+	it = defenses.end();
+    	it--;
+    	
+	while(i != 0 && j != 0)
+	{	
+		if(f[i][j] != f[i-1][j])
+		{					
+			selectedIDs.push_back((*it)->id);
+			j = j - p[i];					
+		}
+		i = i - 1;
+		it--;
+	}
+	
+	if(p[i] <= j)
+		selectedIDs.push_back((*it)->id);
+
 \end{lstlisting}

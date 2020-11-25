@@ -1,15 +1,24 @@
 \begin{lstlisting}
-// sustituya este codigo por su respuesta
-void selectDefenses(...) {
+	for(int j = 0; j <= ases; j++)
+	{
+		if(j < p[0])
+			f[0][j] = 0;
+		else
+			f[0][j] = v[0];
+	}
 
-    unsigned int cost = 0;
-    std::list<Defense*>::iterator it = defenses.begin();
-    while(it != defenses.end()) {
-        if(cost + (*it)->cost <= ases) {
-            selectedIDs.push_back((*it)->id);
-            cost += (*it)->cost;
-        }
-        ++it;
-    }
-}
+
+
+	for(i = 1; i < N; i++)
+	{
+		for(int j = 0; j <= ases ; j++)
+		{
+			if(j < p[i])
+				f[i][j] = f[i-1][j];
+				
+			else		
+				f[i][j] = std::max(f[i-1][j],f[i-1][j - p[i]]+v[i]);
+		}
+	}
+
 \end{lstlisting}
