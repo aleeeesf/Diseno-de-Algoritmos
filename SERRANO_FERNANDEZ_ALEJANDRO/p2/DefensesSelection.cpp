@@ -10,8 +10,8 @@
 
 using namespace Asedio;
 
-double asignar_valor(const Defense& d){
-    double x= d.range/d.damage;
+double asignar_valor(const float& rango, const float& dano){
+    double x= rango/dano;
     return x;
 }
 
@@ -28,7 +28,7 @@ void DEF_LIB_EXPORTED selectDefenses(std::list<Defense*> defenses, unsigned int 
 	//Asignar valores
 	for(std::list<Defense*>::iterator it = defenses.begin(); it != defenses.end(); it++)
 	{
-		v[i] = asignar_valor(*(*it));
+		v[i] = asignar_valor((*it)->range, (*it)->damage);
 		p[i] = (*it)->cost;
 		i++;
 	}
