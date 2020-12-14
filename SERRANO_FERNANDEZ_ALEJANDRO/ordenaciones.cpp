@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include <algorithm>
 
 void fusion(std::vector<int>& v, int i, int k, int j)
 {
@@ -105,26 +105,78 @@ void ordenacion_rapida(std::vector<int>& v, int i, int j)
 }
 
 
+void ordenacion_monticulo(std::vector<int>& v)
+{
+	std::make_heap(v.begin(),v.end());
+	std::sort_heap(v.begin(),v.end());
+}
+
+struct Celda
+{
+
+		int row_, col_;
+		float value_;
+		Celda():row_(0),col_(0),value_(0.0f){}
+		Celda(int fila, int columna, float valor):row_(fila),col_(columna),value_(valor){}
+};
+
+bool operator < (const Celda& a, const Celda& b){ return a.value_ < b.value_;}
+bool operator <= (const Celda& a, const Celda& b){ return a.value_ <= b.value_;}
+
+
+void sin_ordenacion(std::vector<Celda>& v)
+{
+
+	float mayor = 0.0f;
+	int posmayor;
+	for(int i = 0; i != v.size(); i++)
+	{
+		if(v[i].value_ > mayor)
+		{
+			mayor = v[i].value_;
+			posmayor = i;
+		}
+	}
+	
+	posmayor;
+	
+	std::swap(v[posmayor],v.back());
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 int main()
 {
 
-	std::vector<int> v;
+	std::vector<Celda> v;
+	Celda a(1,1,7.0f);
+	Celda b(2,2,4.0f);
+
+	
+	v.push_back(a);
+	v.push_back(b);
+
+
 	
 	
-	v.push_back(7);
-	v.push_back(2);
-	v.push_back(3);
-	v.push_back(4);
-	v.push_back(1);
-	v.push_back(0);
+
 	
-	ordenacion_rapida(v,0,v.size());
+	sin_ordenacion(v);
 	
-	for(std::vector<int>::iterator i = v.begin(); i != v.end(); i++)
+	
+	for(std::vector<Celda>::iterator i = v.begin(); i != v.end(); i++)
 	{
-		std::cout<<*i<<std::endl;
+		std::cout<<(*i).value_<<std::endl;
 	}
 	
 	
