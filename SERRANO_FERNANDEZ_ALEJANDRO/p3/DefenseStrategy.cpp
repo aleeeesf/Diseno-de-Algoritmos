@@ -121,21 +121,21 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 
 void fusion(std::vector<Celda>& v, int i, int k, int j)
 {
-	int n = j - i;
+	int n = j - i + 1;
 	int p = i;
 	int q = k;
 	std::vector<Celda> w;
 	
 	for(int l = 0; l < n; l++)
 	{
-		if(p <= k && (q > j-1 || v[p] <= v[q]))
+		if(p < k && (q > j-1 || v[p] <= v[q]))
 		{
 			w.push_back(v[p]);
 			p = p + 1;
 		}
 		else
 		{
-			w.push_back(v[p]);
+			w.push_back(v[q]);
 			q = q + 1;
 		}	
 	}
@@ -151,7 +151,7 @@ void ordenacion_insercion(std::vector<Celda>& v, int i, int j)
 	int k;
 	Celda aux;
 	
-	for(int i = 0; i < j; i++)	
+	for(int i = 0; i <= j; i++)	
 	{
 
 		aux = v[i];
@@ -166,57 +166,56 @@ void ordenacion_insercion(std::vector<Celda>& v, int i, int j)
 
 void ordenacion_fusion(std::vector<Celda>& v, int i, int j)
 {
-	int n = j - i;
+	int n = j - i + 1;
 	int k = 0;
 	
-	if(n < 3)
+	if(n <= 3)
 		ordenacion_insercion(v,i,j);
 	else
-	{
-		k = j - ((j-1)/2);
+	{	
+		k = i - 1 + n/2;
 		ordenacion_fusion(v,i,k);
-		ordenacion_fusion(v, k, j);
+		ordenacion_fusion(v, k+1, j);
 		fusion(v,i,k,j);
 	} 
 }
 
 
+
 int pivote(std::vector<Celda>& v, int i, int j)
 {
-	int p=i;
-	Celda x;
-	x=v[i];
+	int p = i;
+	Celda x = v[i];
 	Celda aux;
 	for(int k=i+1;k < j;k++)
 	{
-		if(v[k]<=x)
+		if(v[k].value_ <= x.value_)
 		{
 			p=p+1;
-			aux=v[p];
-			v[p]=v[k];
-			v[k]=aux;
+			aux = v[p];
+			v[p] = v[k];
+			v[k] = aux;
 		}
 	}
 	
-	v[i]=v[p];
-	v[p]=x;
+	v[i] = v[p];
+	v[p] = x;
 	
 	return p;
 }
 
-
 void ordenacion_rapida(std::vector<Celda>& v, int i, int j)
 {
 	int p;
-	int n=j-i;
+	int n = j - i + 1;
 	
-	if(n<3)
+	if(n <= 3)
 	{
 		ordenacion_insercion(v,i,j);
 	}
 	else
 	{
-		p=pivote(v,i,j);
+		p = pivote(v,i,j);
 		ordenacion_rapida(v,i,p-1);
 		ordenacion_rapida(v,p+1,j);
 	}
@@ -251,26 +250,64 @@ void sin_ordenacion(std::vector<Celda>& v)
 }
 
 
+bool comprobar_ordenado(const std::vector<Celda>& v)
+{
+	bool ordenado = true;
+	
+	for(int i = 1; i != v.size() - 1; i++)
+	{
+		if(v[i-1].value_ > v[i].value_) 
+			ordenado = false;
+	}
+
+	return ordenado;
+}
+
+
+void caja_negra(const std::vector<Celda>& v)
+{
+	Celda aux;	
+	std::vector<Celda> v2 = v;
+	
+	while(!v2.empty())	    	
+    	{
+		sin_ordenacion(v2);
+	    		
+		aux = v2.back();		
+		v2.pop_back();
+		if(!v.empty())
+		{
+			if( !(aux.value_ > v2.back().value_) )
+				std::cout<<"NO esta ordenado"<<std::endl;
+		}
+    	} 
+    	
+    	
+    	v2 = v;
+    	ordenacion_fusion(v2, 0, v.size()-1);
+    	
+    	if(comprobar_ordenado(v2))
+    		std::cout<<"Con fusion está ordenado"<<std::endl;
+    	else std::cout<<"Con fusion no está ordenado"<<std::endl;
+    	
+    	
+    	v2 = v;
+    	ordenacion_rapida(v2, 0, v.size()-1);
+    	
+    	if(comprobar_ordenado(v2))
+    		std::cout<<"Con ord.rapida está ordenado"<<std::endl;
+    	else std::cout<<"Con fusion no está ordenado"<<std::endl;
 
 
 
+    	v2 = v;
+    	ordenacion_monticulo(v2);
+    	
+    	if(comprobar_ordenado(v2))
+    		std::cout<<"Con monticulo está ordenado"<<std::endl;
+    	else std::cout<<"Con fusion no está ordenado"<<std::endl;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
@@ -282,6 +319,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
     float cellWidth = mapWidth / nCellsWidth;
     float cellHeight = mapHeight / nCellsHeight; 
 
+    cronometro c;
     cronometro c1;
     cronometro c2;
     cronometro c3;
@@ -302,15 +340,11 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
     		celdasCandidatas.push_back(Celda(i,j,defaultCellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
     	}
     }
+        
     
     
-    
-    
-    
-    
-    
-    
-    
+    //caja_negra(celdasCandidatas);
+   
     c1.activar();
     do {	
 	
@@ -343,18 +377,8 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 		
 	    ++r;
 	    
-    } while(c.tiempo() < 1.0);    
-    c1.parar();
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    } while(c1.tiempo() < 1.0);    
+    c1.parar();    
     
     
         
@@ -366,8 +390,10 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    colocado = false;    
 	    //Ordenamos para obtener siempre los de mayor valor
 	    celdasCandidatas2 = celdasCandidatas;
-	    
+		    
 	    /*Ordenacion*/
+	    ordenacion_fusion(celdasCandidatas2, 0, celdasCandidatas2.size()-1);
+
 	    
 	    currentDefense = defenses.begin();
 	 
@@ -391,17 +417,8 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 		
 	    ++r;
 	    
-    } while(c.tiempo() < 1.0);    
-    c2.parar();
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    } while(c2.tiempo() < 1.0);    
+    c2.parar(); 
     
     
     
@@ -413,8 +430,8 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    //Ordenamos para obtener siempre los de mayor valor
 	    celdasCandidatas2 = celdasCandidatas;
 	    
-	    /*Ordenacion*/
 	    
+	    ordenacion_rapida(celdasCandidatas2, 0, celdasCandidatas.size()-1);
 	    currentDefense = defenses.begin();
 	 
 	    //Vamos colocando las defensas restantes y comprobando aquellas que sean factibles
@@ -437,21 +454,10 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 		
 	    ++r;
 	    
-    } while(c.tiempo() < 1.0);    
-    c3.parar();
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    } while(c3.tiempo() < 1.0);    
+    c3.parar(); 
+      
+      
     
     
     c4.activar();
@@ -461,8 +467,8 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    //Ordenamos para obtener siempre los de mayor valor
 	    celdasCandidatas2 = celdasCandidatas;
 	    
-	    /*Ordenacion*/
-	    
+	
+	    ordenacion_monticulo(celdasCandidatas2);
 	    currentDefense = defenses.begin();
 	 
 	    //Vamos colocando las defensas restantes y comprobando aquellas que sean factibles
@@ -485,35 +491,9 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 		
 	    ++r;
 	    
-    } while(c.tiempo() < 1.0);    
-    c4.parar();
+    } while(c4.tiempo() < 1.0);    
+    c4.parar();   
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    std::cout << (nCellsWidth * nCellsHeight) << '\t' << c.tiempo() / r << '\t' << c.tiempo()*2 / r << '\t' << c.tiempo()*3 / r << '\t' << c.tiempo()*4 / r << std::endl;
+    std::cout << (nCellsWidth * nCellsHeight) << '\t' << c1.tiempo() /r << '\t' << c2.tiempo() / r << '\t' << c3.tiempo() / r << '\t' << c4.tiempo() / r << std::endl;
 }
