@@ -1,0 +1,44 @@
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+16	8.40171e-07	8.40138e-07	8.40134e-07	8.40136e-07
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+196	5.35146e-05	5.35124e-05	5.35033e-05	5.35043e-05
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+576	0.000101222	0.000101368	0.000101246	0.000101248
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+1156	0.000596507	0.000597485	0.000597196	0.000600422
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+1936	0.000944391	0.000957076	0.000942312	0.000944767
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+2916	0.00295297	0.00292953	0.00293775	0.00294166
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+2916	0.00371661	0.00384793	0.00370002	0.0037094
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+5476	0.00908331	0.00951714	0.00898344	0.00886188
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+7056	0.0135532	0.0149436	0.0136832	0.0129972
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+8836	0.0201267	0.0255291	0.0204128	0.0203865
+Con fusion está ordenado
+Con ord.rapida está ordenado
+Con monticulo está ordenado
+10816	0.0283973	0.0289774	0.0281384	0.0287548

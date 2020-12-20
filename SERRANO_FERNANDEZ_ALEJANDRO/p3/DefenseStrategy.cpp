@@ -107,16 +107,6 @@ bool factible(Celda celdaActual, bool** freeCells, int nCellsWidth, int nCellsHe
 
 
 
-
-
-
-
-
-
-
-
-
-
 /*	Algoritmos de Ordenación	*/
 
 void fusion(std::vector<Celda>& v, int i, int k, int j)
@@ -151,11 +141,11 @@ void ordenacion_insercion(std::vector<Celda>& v, int i, int j)
 	int k;
 	Celda aux;
 	
-	for(int i = 0; i <= j; i++)	
+	for(int t = i; t <= j; t++)	
 	{
 
-		aux = v[i];
-		for(k = i; k > 0 && (aux < v[k-1]); k--)
+		aux = v[t];
+		for(k = t; k > 0 && (aux < v[k-1]); k--)
 		{
 			v[k] = v[k-1];
 		}
@@ -232,10 +222,18 @@ void ordenacion_monticulo(std::vector<Celda>& v)
 
 void sin_ordenacion(std::vector<Celda>& v)
 {
-
+/*
+	for(int i=0;i<v.size()-1;i++){
+        	for(int j=i+1;j<v.size();j++){    
+            		if(v[i].value_>v[j].value_){
+            			std::swap(v[i],v[j]);
+            		}
+           	 }
+	}
+*/
 	float mayor = 0.0f;
-	int posmayor;
-	for(int i = 0; i != v.size(); i++)
+	int posmayor = 0;
+	for(int i = 0; i <= v.size()-1; i++)
 	{
 		if(v[i].value_ > mayor)
 		{
@@ -244,9 +242,10 @@ void sin_ordenacion(std::vector<Celda>& v)
 		}
 	}
 	
-	posmayor;
+	//std::cout<<"Mayor"<<&v[posmayor]<<"final"<<&v[v.size()-1]<<std::endl;	
+	std::swap(v[posmayor],v[v.size()-1]);
+
 	
-	std::swap(v[posmayor],v.back());
 }
 
 
@@ -277,11 +276,10 @@ void caja_negra(const std::vector<Celda>& v)
 		v2.pop_back();
 		if(!v.empty())
 		{
-			if( !(aux.value_ > v2.back().value_) )
+			if( aux.value_ < v2.back().value_ )
 				std::cout<<"NO esta ordenado"<<std::endl;
 		}
-    	} 
-    	
+    	}     	
     	
     	v2 = v;
     	ordenacion_fusion(v2, 0, v.size()-1);
@@ -325,7 +323,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
     cronometro c3;
     cronometro c4;
                 
-    long int r = 0;
+    long int r1 = 0,r2 = 0,r3 = 0,r4 = 0;
     
     
     List<Defense*>::iterator currentDefense;
@@ -375,7 +373,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    	currentDefense++;
 	    }  	
 		
-	    ++r;
+	    ++r1;
 	    
     } while(c1.tiempo() < 1.0);    
     c1.parar();    
@@ -391,7 +389,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    //Ordenamos para obtener siempre los de mayor valor
 	    celdasCandidatas2 = celdasCandidatas;
 		    
-	    /*Ordenacion*/
+	
 	    ordenacion_fusion(celdasCandidatas2, 0, celdasCandidatas2.size()-1);
 
 	    
@@ -415,7 +413,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    	currentDefense++;
 	    }  	
 		
-	    ++r;
+	    ++r2;
 	    
     } while(c2.tiempo() < 1.0);    
     c2.parar(); 
@@ -452,7 +450,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    	currentDefense++;
 	    }  	
 		
-	    ++r;
+	    ++r3;
 	    
     } while(c3.tiempo() < 1.0);    
     c3.parar(); 
@@ -489,11 +487,11 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    	currentDefense++;
 	    }  	
 		
-	    ++r;
+	    ++r4;
 	    
     } while(c4.tiempo() < 1.0);    
     c4.parar();   
     
     
-    std::cout << (nCellsWidth * nCellsHeight) << '\t' << c1.tiempo() /r << '\t' << c2.tiempo() / r << '\t' << c3.tiempo() / r << '\t' << c4.tiempo() / r << std::endl;
+    std::cout << (nCellsWidth * nCellsHeight) << '\t' << c1.tiempo() / r1 << '\t' << c2.tiempo() / r2 << '\t' << c3.tiempo() / r3 << '\t' << c4.tiempo() / r4 << std::endl;
 }

@@ -49,11 +49,11 @@ void ordenacion_insercion(std::vector<Celda>& v, int i, int j)
 	int k;
 	Celda aux;
 	
-	for(int i = 0; i <= j; i++)	
+	for(int t = i; t <= j; t++)	
 	{
 
-		aux = v[i];
-		for(k = i; k > 0 && (aux < v[k-1]); k--)
+		aux = v[t];
+		for(k = t; k > 0 && (aux < v[k-1]); k--)
 		{
 			v[k] = v[k-1];
 		}
@@ -123,12 +123,22 @@ void ordenacion_monticulo(std::vector<int>& v)
 	std::sort_heap(v.begin(),v.end());
 }
 
+
+
 void sin_ordenacion(std::vector<Celda>& v)
 {
 
+	for(int i=0;i<v.size()-1;++i){
+        	for(int j=i+1;j<v.size();++j){    
+            		if(v[i].value_>v[j].value_){
+            			std::swap(v[i],v[j]);
+            		}
+           	 }
+	}
+/*
 	float mayor = 0.0f;
-	int posmayor;
-	for(int i = 0; i != v.size(); i++)
+	int posmayor = 0;
+	for(int i = 0; i <= v.size()-1; i++)
 	{
 		if(v[i].value_ > mayor)
 		{
@@ -137,10 +147,9 @@ void sin_ordenacion(std::vector<Celda>& v)
 		}
 	}
 	
-	posmayor;
-	
-	std::swap(v[posmayor],v.back());
-
+	//std::cout<<"Mayor"<<&v[posmayor]<<"final"<<&v[v.size()-1]<<std::endl;	
+	std::swap(v[posmayor],v[v.size()-1]);
+*/
 }
 
 int main()
@@ -162,10 +171,16 @@ int main()
 	v.push_back(f);
 	v.push_back(g);	
 	
-
+	ordenacion_fusion(v,0,v.size()-1);
 	
-	ordenacion_rapida(v,0,v.size()-1);
-	
+/*
+	while(!v.empty())	    	
+    	{
+		sin_ordenacion(v);
+		std::cout<<v.back().value_<<std::endl;		
+		v.pop_back();		
+    	} 
+	*/
 	
 	for(std::vector<Celda>::iterator i = v.begin(); i != v.end(); i++)
 	{
