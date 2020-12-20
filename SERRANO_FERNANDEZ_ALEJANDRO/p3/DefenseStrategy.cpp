@@ -9,6 +9,7 @@
 #include "../simulador/Asedio.h"
 #include "../simulador/Defense.h"
 #include "cronometro.h"
+#include <algorithm>
 
 using namespace Asedio;        
 
@@ -136,6 +137,7 @@ void fusion(std::vector<Celda>& v, int i, int k, int j)
 	}
 }
 
+
 void ordenacion_insercion(std::vector<Celda>& v, int i, int j)
 {
 	int k;
@@ -171,7 +173,6 @@ void ordenacion_fusion(std::vector<Celda>& v, int i, int j)
 }
 
 
-
 int pivote(std::vector<Celda>& v, int i, int j)
 {
 	int p = i;
@@ -193,6 +194,7 @@ int pivote(std::vector<Celda>& v, int i, int j)
 	
 	return p;
 }
+
 
 void ordenacion_rapida(std::vector<Celda>& v, int i, int j)
 {
@@ -219,18 +221,8 @@ void ordenacion_monticulo(std::vector<Celda>& v)
 }
 
 
-
 void sin_ordenacion(std::vector<Celda>& v)
 {
-/*
-	for(int i=0;i<v.size()-1;i++){
-        	for(int j=i+1;j<v.size();j++){    
-            		if(v[i].value_>v[j].value_){
-            			std::swap(v[i],v[j]);
-            		}
-           	 }
-	}
-*/
 	float mayor = 0.0f;
 	int posmayor = 0;
 	for(int i = 0; i <= v.size()-1; i++)
@@ -243,12 +235,11 @@ void sin_ordenacion(std::vector<Celda>& v)
 	}
 	
 	//std::cout<<"Mayor"<<&v[posmayor]<<"final"<<&v[v.size()-1]<<std::endl;	
-	std::swap(v[posmayor],v[v.size()-1]);
-
-	
+	std::swap(v[posmayor],v[v.size()-1]);	
 }
 
 
+//Comprobamos que el vector esta ordenado de menor a mayor
 bool comprobar_ordenado(const std::vector<Celda>& v)
 {
 	bool ordenado = true;
@@ -266,7 +257,13 @@ bool comprobar_ordenado(const std::vector<Celda>& v)
 void caja_negra(const std::vector<Celda>& v)
 {
 	Celda aux;	
+	bool fail = false;
 	std::vector<Celda> v2 = v;
+	
+
+	/* 	SIN ORDENACION 		*/
+	
+	std::next_permutation(v2.begin(),v2.end()); //Pasa a la siguiente permutacion
 	
 	while(!v2.empty())	    	
     	{
@@ -274,41 +271,66 @@ void caja_negra(const std::vector<Celda>& v)
 	    		
 		aux = v2.back();		
 		v2.pop_back();
-		if(!v.empty())
-		{
+		
+		//Comprobamos que el elemento anterior sacado es mayor que el ultimo elemento
+		if(!v2.empty())
+		{	
+			sin_ordenacion(v2);
 			if( aux.value_ < v2.back().value_ )
-				std::cout<<"NO esta ordenado"<<std::endl;
+			{				
+				fail = true;
+			}
+				
 		}
     	}     	
     	
+    	if(!fail)
+    		std::cout<<"Sin ordenacion realizado correctamente"<<std::endl;
+    	else std::cout<<"ERROR: Sin ordenacion ha fracasado"<<std::endl;
+    		
+    		
+    	v2 = v;    	
+        std::next_permutation(v2.begin(),v2.end());	
+    	  	
+
+	/*	ORDENACION POR FUSION	*/
+    	ordenacion_fusion(v2, 0, v.size()-1);  
+    	  	
+	if(comprobar_ordenado(v2))
+		std::cout<<"Con fusion está ordenado"<<std::endl;
+	else std::cout<<"ERROR: Con fusion no está ordenado"<<std::endl;  	
+    	
+
+    	
     	v2 = v;
-    	ordenacion_fusion(v2, 0, v.size()-1);
+    	std::next_permutation(v2.begin(),v2.end());
     	
-    	if(comprobar_ordenado(v2))
-    		std::cout<<"Con fusion está ordenado"<<std::endl;
-    	else std::cout<<"Con fusion no está ordenado"<<std::endl;
-    	
-    	
-    	v2 = v;
+
+	/*	ORDENACION RAPIDA	*/	
     	ordenacion_rapida(v2, 0, v.size()-1);
     	
     	if(comprobar_ordenado(v2))
     		std::cout<<"Con ord.rapida está ordenado"<<std::endl;
-    	else std::cout<<"Con fusion no está ordenado"<<std::endl;
+    	else std::cout<<"ERROR: Con ord.rapida no está ordenado"<<std::endl;
 
 
 
     	v2 = v;
+    	std::next_permutation(v2.begin(),v2.end());
+
+
+	/*	ORDENACION POR MONTICULO	*/	
     	ordenacion_monticulo(v2);
     	
     	if(comprobar_ordenado(v2))
     		std::cout<<"Con monticulo está ordenado"<<std::endl;
-    	else std::cout<<"Con fusion no está ordenado"<<std::endl;
+    	else std::cout<<"ERROR: Con monticulo no está ordenado"<<std::endl;
 
 }
 
 
 
+/*	PLACE DEFENSES	*/
 
 
 void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCellsHeight, float mapWidth, float mapHeight
@@ -325,6 +347,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
                 
     long int r1 = 0,r2 = 0,r3 = 0,r4 = 0;
     
+    int intentos = 0;
     
     List<Defense*>::iterator currentDefense;
     std::vector<Celda> celdasCandidatas;
@@ -338,10 +361,31 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
     		celdasCandidatas.push_back(Celda(i,j,defaultCellValue(i, j, freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses)));
     	}
     }
+    
+    
+    /*	------	PRUEBA DE CAJA NEGRA  -------	*/   
         
+    //Descomentar para hacer prueba de caja negra
+    
+    /*    
+	    do
+	    {
+	    	    caja_negra(celdasCandidatas);
+	    	    intentos++;
+	    }while(intentos < 40);
+	    
+    */
     
     
-    //caja_negra(celdasCandidatas);
+    
+    
+    
+    
+    /*	------	ALGORITMOS DE ORDENACION  ------  */
+    
+    //Descomentar para calcular los tiempos de cada algoritmo de ordenacion
+   
+   /*
    
     c1.activar();
     do {	
@@ -491,7 +535,48 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    
     } while(c4.tiempo() < 1.0);    
     c4.parar();   
-    
+
     
     std::cout << (nCellsWidth * nCellsHeight) << '\t' << c1.tiempo() / r1 << '\t' << c2.tiempo() / r2 << '\t' << c3.tiempo() / r3 << '\t' << c4.tiempo() / r4 << std::endl;
+    
+    
+    
+    
+*/
+
+
+	/*  ------  ESTRATEGIA SELECCIONADA  ------  */
+	
+/*	
+	    colocado = false;    
+	    //Ordenamos para obtener siempre los de mayor valor
+	    celdasCandidatas2 = celdasCandidatas;
+	    
+	    
+	    ordenacion_rapida(celdasCandidatas2, 0, celdasCandidatas.size()-1);
+	    currentDefense = defenses.begin();
+	 
+	    //Vamos colocando las defensas restantes y comprobando aquellas que sean factibles
+	    while(currentDefense != defenses.end()) 
+	    {
+	    	colocado = false;
+	    	
+	    	while(!celdasCandidatas2.empty() && !colocado)
+	    	{
+		    	if(factible(celdasCandidatas2.back(), freeCells, nCellsWidth, nCellsHeight, mapWidth, mapHeight, obstacles, defenses, currentDefense))
+		    	{
+		    		(*currentDefense)->position.x = (celdasCandidatas2.back().row_ * cellWidth) +  (0.5f * cellWidth);
+	    			(*currentDefense)->position.y = (celdasCandidatas2.back().col_ * cellHeight) + (cellHeight * 0.5f);
+		    		colocado = true;
+		     	}
+		    	celdasCandidatas2.pop_back();
+	    	}    	
+	    	currentDefense++;
+	    }    
+
+
+*/
+
+
+
 }

@@ -1,1 +1,90 @@
-Escriba aquí su respuesta al ejercicio 4.
+\begin{lstlisting}
+void caja_negra(const std::vector<Celda>& v)
+{
+	Celda aux;	
+	bool fail = false;
+	std::vector<Celda> v2 = v;
+	
+
+	/* 	SIN ORDENACION 		*/
+	
+	std::next_permutation(v2.begin(),v2.end()); //Pasa a la siguiente permutacion
+	
+	while(!v2.empty())	    	
+    	{
+		sin_ordenacion(v2);
+	    		
+		aux = v2.back();		
+		v2.pop_back();
+		
+		//Comprobamos que el elemento anterior sacado es mayor que el ultimo elemento
+		if(!v2.empty())
+		{	
+			sin_ordenacion(v2);
+			if( aux.value_ < v2.back().value_ )
+			{				
+				fail = true;
+			}
+				
+		}
+    	}     	
+    	
+    	if(!fail)
+    		std::cout<<"Sin ordenacion realizado correctamente"<<std::endl;
+    	else std::cout<<"ERROR: Sin ordenacion ha fracasado"<<std::endl;
+    		
+    		
+    	v2 = v;    	
+        std::next_permutation(v2.begin(),v2.end());	
+    	  	
+
+	/*	ORDENACION POR FUSION	*/
+    	ordenacion_fusion(v2, 0, v.size()-1);  
+    	  	
+	if(comprobar_ordenado(v2))
+		std::cout<<"Con fusion esta ordenado"<<std::endl;
+	else std::cout<<"ERROR: Con fusion no esta ordenado"<<std::endl;  	
+    	
+
+    	
+    	v2 = v;
+    	std::next_permutation(v2.begin(),v2.end());
+    	
+
+	/*	ORDENACION RAPIDA	*/	
+    	ordenacion_rapida(v2, 0, v.size()-1);
+    	
+    	if(comprobar_ordenado(v2))
+    		std::cout<<"Con ord.rapida esta ordenado"<<std::endl;
+    	else std::cout<<"ERROR: Con ord.rapida no esta ordenado"<<std::endl;
+
+
+
+    	v2 = v;
+    	std::next_permutation(v2.begin(),v2.end());
+
+
+	/*	ORDENACION POR MONTICULO	*/	
+    	ordenacion_monticulo(v2);
+    	
+    	if(comprobar_ordenado(v2))
+    		std::cout<<"Con monticulo esta ordenado"<<std::endl;
+    	else std::cout<<"ERROR: Con monticulo no esta ordenado"<<std::endl;
+
+}
+
+
+//Comprobamos que el vector esta ordenado de menor a mayor
+bool comprobar_ordenado(const std::vector<Celda>& v)
+{
+	bool ordenado = true;
+	
+	for(int i = 1; i != v.size() - 1; i++)
+	{
+		if(v[i-1].value_ > v[i].value_) 
+			ordenado = false;
+	}
+
+	return ordenado;
+}
+\end{lstlisting}
