@@ -295,18 +295,13 @@ void caja_negra()
 
 void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCellsHeight, float mapWidth, float mapHeight
               , List<Object*> obstacles, List<Defense*> defenses) {
-/*
-    cronometro c;
-    c.activar();
-*/
+
     float cellWidth = mapWidth / nCellsWidth;
     float cellHeight = mapHeight / nCellsHeight;
-
     
     
     List<Defense*>::iterator currentDefense;
-    std::vector<Celda> celdasCandidatas;
-    std::vector<Celda> celdasCandidatas2;
+    std::vector<Celda> celdasCandidatas;    
     bool colocado;
     
     for(int i = 0; i < nCellsWidth; i++)
@@ -331,8 +326,8 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
     /*	------	ALGORITMOS DE ORDENACION  ------  */
     
     //Descomentar para calcular los tiempos de cada algoritmo de ordenacion
-   
-   
+   /*
+   	    std::vector<Celda> celdasCandidatas2;
 	    cronometro c1, c2, c3, c4;                
 	    long int r1 = 0,r2 = 0,r3 = 0,r4 = 0;
 	    const double e_abs = 0.01, // Máximo error absoluto cometido.
@@ -489,7 +484,7 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 
 	    
 	    std::cout << (nCellsWidth * nCellsHeight) << '\t' << c1.tiempo() / r1 << '\t' << c2.tiempo() / r2 << '\t' << c3.tiempo() / r3 << '\t' << c4.tiempo() / r4 << std::endl;
-	    
+	    */
 	    
     
     
@@ -497,13 +492,11 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 
 
 	/*  ------  ESTRATEGIA SELECCIONADA  ------  */
-	/*
+	
 	    
-	    colocado = false;    
-	    //Ordenamos para obtener siempre los de mayor valor
-	    
-	    
-	    ordenacion_rapida(celdasCandidatas, 0, celdasCandidatas.size()-1);
+	    colocado = false;   
+	    	    
+	    ordenacion_rapida(celdasCandidatas,0,celdasCandidatas.size()-1);
 	    currentDefense = defenses.begin();
 	 
 	    //Vamos colocando las defensas restantes y comprobando aquellas que sean factibles
@@ -523,12 +516,4 @@ void DEF_LIB_EXPORTED placeDefenses3(bool** freeCells, int nCellsWidth, int nCel
 	    	}    	
 	    	currentDefense++;
 	    }    
-*/
-/*
-
-	c.parar();
-
-	std::cout<<c.tiempo()<<std::endl;
-
-*/
 }

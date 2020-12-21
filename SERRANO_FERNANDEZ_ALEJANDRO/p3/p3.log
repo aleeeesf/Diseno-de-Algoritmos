@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.10.19)  21 DEC 2020 20:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.10.19)  21 DEC 2020 23:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -243,7 +243,7 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <8> not available
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]) (./e3.tex [2]) (./e4.tex)
  (./e5.tex [3]) (./e6.tex
-<graphic.png, id=19, 1505.625pt x 1053.9375pt>
+<graphic.png, id=18, 1505.625pt x 1053.9375pt>
 File: graphic.png Graphic file (type png)
 <use graphic.png>
 Package pdftex.def Info: graphic.png  used on input line 2.
@@ -255,7 +255,7 @@ LaTeX Info: Redefining \% on input line 4.
 Here is how much of TeX's memory you used:
  5108 strings out of 482761
  69021 string characters out of 5954204
- 698841 words of memory out of 5000000
+ 697841 words of memory out of 5000000
  20455 multiletter control sequences out of 15000+600000
  539448 words of font info for 44 fonts, out of 8000000 for 9000
  40 hyphenation exceptions out of 8191
@@ -268,7 +268,7 @@ ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on p3.pdf (7 pages, 140741 bytes).
+Output written on p3.pdf (7 pages, 139788 bytes).
 PDF statistics:
  64 PDF objects out of 1000 (max. 8388607)
  44 compressed objects within 1 object stream

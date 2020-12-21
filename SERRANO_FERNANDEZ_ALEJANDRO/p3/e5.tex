@@ -1,31 +1,34 @@
 \textbf{-Complejidad Espacial:} Para todos los algoritmos de ordenación usados en esta práctica (incluido el método sin ordenación), he hecho uso de dos vectores de Celdas, de tal manera que en uno se almacenará todas la celdas ya valoradas, 
-y otro donde copiaré el contenido del anterior vector por motivos de eficiencia, para no evaluar de nuevo todas las celdas, pues la evaluación tiene un coste temporal de n². En este caso, estaríamos hablando de una complejidad 
-espacial de 2*n, siendo en el número de celdas del mapa.
+y otro donde copiaré el contenido del anterior vector por motivos de eficiencia, para no evaluar de nuevo todas las celdas, pues la evaluación tiene un coste temporal de n (número de celdas). En este caso, estaríamos hablando de una complejidad 
+espacial de 2*n, siendo n el número de celdas del mapa.
 
 \hspace\fill
 
 \textbf{-Complejidad Temporal:} 
 Siendo n el numero de celdas y p el número de defensas a colocar,
-para el método de colocación de defensas sin preordenación obtendríamos una complejidad de n + p * (n + p), es decir, el coste de dar valor a cada celda, más el número de defensas a colocar por el coste de buscar el mayor elemento (orden n) y de buscar la celda factible.
+para el método de colocación de defensas sin preordenación obtendríamos una complejidad de n + p*(n*n), es decir, el coste de dar valor a cada celda, más el número de defensas a colocar por el coste 
+de buscar el mayor elemento (orden n) por el coste de recorrer todas las celdas hasta encontrar una factible.
 \hspace\fill
 
-Para el algoritmo de ordenación por fusión obtendrmos una complejidad temporal de orden n*log n, luego la complejidad temporal del algoritmo de colocación de defensas sería de n + n*log n + n*p, es decir, el coste de valorar cada celda, 
+Para el algoritmo de ordenación por fusión obtendríamos una complejidad temporal de orden n*log n, luego la complejidad temporal del algoritmo de colocación de defensas sería de n + n*log n + n*p, es decir, el coste de valorar cada celda, 
 más ordenar las celdas más el coste de colocar una defensa por el el coste de recorrer todas las celdas hasta encontrar una celda factible.
 \hspace\fill
 
-Para el algoritmo de ordenacion rápida obtendrmos en el peor caso una complejidad temporal de orden n², luego la complejidad temporal del algoritmo de colocación de defensas sería de n + n² + n*p.
+Para el algoritmo de ordenacion rápida obtendríamos en el peor caso una complejidad temporal de orden n², luego la complejidad temporal del algoritmo de colocación de defensas sería de n + n² + n*p.
 
 
-En el mejor caso del algoritmo de ordenación rápida obtendrmos una complejidad temporal de orden n*log n, luego la complejidad temporal del algoritmo de colocación de defensas sería de n + n*log n + n*p
+En el mejor caso del algoritmo de ordenación rápida obtendríamos una complejidad temporal de orden n*log n, luego la complejidad temporal del algoritmo de colocación de defensas sería de n + n*log n + n*p
 \hspace\fill
 
 Para el algoritmo de ordenación por montículo obtendríamos una complejidad temporal de orden n*log n, luego la complejidad temporal del algoritmo de colocación de defensas sería de 
-n(valorar las celdas) + n*log n (su creación)+n*log n + n*p
+n(valorar las celdas) + n*log n (su creación) + n*log n(ordenar) + n*p
 
 \hspace\fill
 \hspace\fill
-A la vista de los resultados obtenidos, el algoritmo con el que obtenemos mejor resultado, es el de ordenación ....
 
-
+A la vista de los resultados obtenidos, el algoritmo que menos tiempo de ejecución ha necesitado, ha sido el algoritmo de ordenación rápida, aunque con el algoritmo de ordenación por montículo obtenemos resultados parecidos
+aunque tarda ligeramente más que el de ordenacion rapida.
+\hspace\fill
+El resultado que más me ha impactado ha sido el del algoritmo de fusión, pues con éste obtenemos unos resultados desastrosos en comparación a los demás algoritmos. Vease en el gráfico que se muestra en el ejercicio 6.
 
 
