@@ -1,1 +1,8 @@
-Escriba aquí su respuesta al ejercicio 1.
+El algoritmo utilizado para determinar el camino que los ucos deben recorrer ha sido el A* explicado en las clases de teoría.
+La heurística a seguir en mi algoritmo para calcular el coste en entre un nodo y el nodo final(centro de extracción) ha sido 
+la distacia euclídea. Destacar que, a ésta le sumamos un coste adicional si el nodo se encuentra cerca de las defensas. Por tanto 
+escogeremos aquellas celdas que supongan un menor recorrido al centro de extracción y que están mas lejos de las defensas.
+
+
+En cuanto a las estructuras de datos, he hecho uso de un montículo para obtener los nodos con menor coste de la lista de abiertos, 
+y dos vectores para almacenar los nodos abiertos y cerrados.
