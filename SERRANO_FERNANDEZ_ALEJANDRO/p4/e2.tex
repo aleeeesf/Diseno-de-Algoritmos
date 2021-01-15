@@ -3,41 +3,39 @@ void DEF_LIB_EXPORTED calculateAdditionalCost(float** additionalCost
                    , int cellsWidth, int cellsHeight, float mapWidth, float mapHeight
                    , List<Object*> obstacles, List<Defense*> defenses) {
 
-    float cellWidth = mapWidth / cellsWidth;
-    float cellHeight = mapHeight / cellsHeight;
-    int celda_x, celda_y;
-    float valor,posicion;
+float cellWidth = mapWidth / cellsWidth;
+float cellHeight = mapHeight / cellsHeight;
+int celda_x, celda_y;
+float valor,posicion;
+
+List<Defense*>::iterator currentDefense = defenses.begin();
+
+
+for(int i = 0 ; i < cellsHeight ; ++i) {
+for(int j = 0 ; j < cellsWidth ; ++j) {            
+   
+    Vector3 cellPosition = cellCenterToPosition(i, j, cellWidth, cellHeight);
+    float cost = 0; 
+    auto it = defenses.begin();
+    it++;
     
-    List<Defense*>::iterator currentDefense = defenses.begin();
+    //Asignamos un mayor valor a aquellas posiciones que mas cerca esten de las defensas
+    for(it; it != defenses.end(); it++)
+    {
+	celda_x = (((*it)->position.x - cellWidth/2) / cellWidth);
+	celda_y = (((*it)->position.y - cellHeight/2) / cellHeight);
 
-
-    for(int i = 0 ; i < cellsHeight ; ++i) {
-        for(int j = 0 ; j < cellsWidth ; ++j) {
-            
-            
-            Vector3 cellPosition = cellCenterToPosition(i, j, cellWidth, cellHeight);
-            float cost = 0;
-            auto it = defenses.begin();
-            it++;
-            
-            //Asignamos un mayor valor a aquellas posiciones que mas cerca esten de las defensas
-            for(it; it != defenses.end(); it++)
-	    {
-		celda_x = (((*it)->position.x - cellWidth/2) / cellWidth);
-		celda_y = (((*it)->position.y - cellHeight/2) / cellHeight);
-
-		posicion = abs(celda_x - i);
-		valor -= posicion;
-		posicion = abs(celda_y - j);
-		valor -= posicion;
-		cost = valor * 100;
-	    }
-             
-            additionalCost[i][j] = cost;
-        }
-    }    
+	posicion = abs(celda_x - i);
+	valor += posicion;
+	posicion = abs(celda_y - j);
+	valor += posicion;
+	cost = valor * 100;
+    }
+     
+    additionalCost[i][j] = cost;
 }
-
+}    
+}
 
 
 void DEF_LIB_EXPORTED calculatePath(AStarNode* originNode, AStarNode* targetNode
@@ -85,7 +83,7 @@ else
 			{
 				(*j)->parent = current;
 				(*j)->G = current->G + _sdistance(current->position, (*j)->position);
-				(*j)->H = _sdistance(current->position, (*j)->position); 
+				(*j)->H = _sdistance((*j)->position, targetNode->position); 
 				(*j)->F = (*j)->G + (*j)->H + additionalCost[(int)((*j)->position.y / cellsHeight)][(int)((*j)->position.x / cellsWidth)];  
 				abiertos.push_back((*j)); 	
 				std::push_heap(abiertos.begin(),abiertos.end(),es_menor);			
@@ -112,10 +110,9 @@ current = targetNode;
 path.push_front(targetNode->position);
 
 while(current->parent != originNode && targetNode->parent != NULL){
-	current = current->parent;
-	path.push_front(current->position);
+current = current->parent;
+path.push_front(current->position);
 }
 
 }
-
 \end{lstlisting}

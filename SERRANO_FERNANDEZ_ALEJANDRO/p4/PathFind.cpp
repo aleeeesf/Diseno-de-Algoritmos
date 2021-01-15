@@ -38,11 +38,10 @@ void DEF_LIB_EXPORTED calculateAdditionalCost(float** additionalCost
 
 
     for(int i = 0 ; i < cellsHeight ; ++i) {
-        for(int j = 0 ; j < cellsWidth ; ++j) {
-            
-            
+        for(int j = 0 ; j < cellsWidth ; ++j) {            
+           
             Vector3 cellPosition = cellCenterToPosition(i, j, cellWidth, cellHeight);
-            float cost = 0;
+            float cost = 0; 
             auto it = defenses.begin();
             it++;
             
@@ -53,9 +52,9 @@ void DEF_LIB_EXPORTED calculateAdditionalCost(float** additionalCost
 		celda_y = (((*it)->position.y - cellHeight/2) / cellHeight);
 
 		posicion = abs(celda_x - i);
-		valor -= posicion;
+		valor += posicion;
 		posicion = abs(celda_y - j);
-		valor -= posicion;
+		valor += posicion;
 		cost = valor * 100;
 	    }
              
@@ -161,7 +160,7 @@ void DEF_LIB_EXPORTED calculatePath(AStarNode* originNode, AStarNode* targetNode
     				{
     					(*j)->parent = current;
     					(*j)->G = current->G + _sdistance(current->position, (*j)->position);
-    					(*j)->H = _sdistance(current->position, (*j)->position); 
+    					(*j)->H = _sdistance((*j)->position, targetNode->position); 
     					(*j)->F = (*j)->G + (*j)->H + additionalCost[(int)((*j)->position.y / cellsHeight)][(int)((*j)->position.x / cellsWidth)];  
     					abiertos.push_back((*j)); 	
     					std::push_heap(abiertos.begin(),abiertos.end(),es_menor);			
