@@ -1,0 +1,23 @@
+maquinas: m x n x T[][] -> S
+desde i <- 1 hasta n
+	S[i] <- 0
+M <- S
+S <- maquinas-tareas(m,n,T,S,1,M)
+
+
+maquinas-tareas: m x n x T[m][n] x S x k x M -> M
+desde i<-1 hasta m
+	si ¬maquina-repetida(S,i,k)
+		S[K] = k
+		si k = n
+			si tiempo(S) < tiempo(M)
+				M <-S
+		si no
+			M <- maquinas-tareas(m,n,T,S,k+1,M)
+
+
+maquina-repetida: S x p x k -> r
+i <- 1
+r = False
+mientras i < k ^ r = False
+	r <- (S[i] = p)
