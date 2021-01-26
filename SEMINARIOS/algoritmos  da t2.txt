@@ -1,0 +1,60 @@
+Mochila: valor x peso x objetos x capacidad -> S
+desde j<-0 hasta capacidad
+  si j<peso[1]
+    f[1][j]<-0
+  si no
+    f[1][j]<-valor[1]
+  desde i<-2 hasta objetos
+    desde j<-0 hasta capacidad
+      si j<peso[i]
+        f[i][j]<-f[i-1][j]
+      si no
+        f[i][j]<-max(f[i-1][j],f[i-1][j-peso[i]]+valor[i])
+S<-f[objetos][capacidad] //solo devuelve el maximo beneficio
+
+####################################################
+
+Cambio: valor x monedas x cambio -> S
+f[1][0]<-0
+desde j<-1 hasta cambio
+  si j < valir[1] //estoy en pseudo por ello no tengo en cuent ala pos 0
+    f[1][j]<-INF
+  si no 
+    f[i][j]<- 1+f[1][j-valor[1]]
+desde i<-2 hasta monedas
+  f[i][0]<-0
+  desde j<-1 hasta cambio
+    si j< valor[i]
+      f[i][j]<-f[i-1][j]
+    si no
+      f[i][j]<-min(f[i-1][j],1+f[i-1][j-valor[i]])
+S<- f[monedas][cambio] //solo devuelve el minimo n de monedas
+
+####################################################
+
+Floyd: P->P
+desde i<-1 hasta n
+  P[i][i]<-0
+desde k<-1 hasta n
+  desde i<-1 hasta n
+    desde j<-1 hasta n
+      P[i][j]<-min(P[i][j],P[i][k]+P[k][j])
+
+#####################################################
+//clausura reflexiva y transitiva matriz de adyacencia->matriz accesibilidad
+//ambas son matrices booleanas
+//A es la matriz de adyacencia
+Warshall: A ->matriz
+desde i<-1 hasta n
+  matriz[ì][i]<-true
+desde k<-1 hasta n
+  desde i<-1 hasta n
+    desde j<-1 hasta n
+      matriz[i][j]<-A[i][j]V(A[i][k]^A[k][j])
+
+
+
+
+
+
+
